@@ -3,16 +3,24 @@ import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { removeCart } from "../features/cart/cartSlice";
+import { removeCart,updateCart } from "../features/cart/cartSlice";
 
 export default function CartPage() {
   const dispatch = useDispatch();
 
   const cart = useSelector((state) => state.cart.cart);
 
+  const totalAmount = cart?.reduce((acc,product)=>acc+product.price*product.quantity,0).toFixed(2)
+  const totalItems = cart?.reduce((acc,product)=>acc+product.quantity,0)
+
   const handleRemove = (id) => {
     dispatch(removeCart(id));
   };
+
+  const handleQuantity = (e, product) => {
+    const obj = {...product, quantity: +e.target.value}
+    dispatch(updateCart(obj))
+  }
 
   return (
     <div className="mx-auto max-w-7xl mt-12  bg-white px-4 sm:px-6 lg:px-8">
@@ -28,7 +36,7 @@ export default function CartPage() {
               <li key={product.id} className="flex py-6">
                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                   <img
-                    src={product.image}
+                    src={product.images[0]}
                     alt={product.title}
                     className="h-full w-full object-cover object-center"
                   />
@@ -54,7 +62,7 @@ export default function CartPage() {
                       >
                         QTY
                       </label>
-                      <select onChange={(e) => handleQuantity(e, product)}>
+                      <select value={product.quantity} onChange={(e) => handleQuantity(e, product)}>
                         <option value="1"> 1 </option>
                         <option value="2"> 2 </option>
                         <option value="3"> 3 </option>
@@ -83,12 +91,12 @@ export default function CartPage() {
       <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
         <div className="flex justify-between text-base font-medium text-gray-900">
           <p>Subtotal</p>
-          {/* <p>{totalAmount} PKR </p> */}
+          <p>{totalAmount} PKR </p>
         </div>
 
         <div className="flex justify-between py-2 text-base font-medium text-gray-900">
           <p>total Items</p>
-          {/* <p>{totalItems} Items</p> */}
+          <p>{totalItems} Items</p>
         </div>
 
         <p className="mt-0.5 text-sm text-gray-500">

@@ -16,7 +16,9 @@ function Product() {
   }, []);
 
   const handleAddCart = (product) => {
-    dispatch(addCart(product));
+    const newObj = { ...product, quantity: 1 };
+    dispatch(addCart(newObj));
+    toast.success(`${product.title} added to cart!`);
   };
 
   return (
@@ -34,7 +36,7 @@ function Product() {
               >
                 <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
                   <img
-                    src={product.image}
+                    src={product.thumbnail}
                     alt={product.image}
                     className="h-full w-full object-cover object-center lg:h-full lg:w-full"
                   />
@@ -49,20 +51,19 @@ function Product() {
                     </h3>
                     <p className="mt-1 text-sm text-gray-500">
                       {" "}
-                      rating :{product.rating.rate}
+                      rating :{product.rating}
                     </p>
                   </div>
                   <p className="text-sm font-medium text-gray-900">
-                    {product.price}$
+                    {product.price} PKR
                   </p>
                 </div>
               </Link>
               <button
                 onClick={() => handleAddCart(product)}
-                onMouseDown={() => toast("Added to Cart")}
                 className="bg-blue-400 py-1 px-5 text-white"
               >
-                Add to Cart <ToastContainer />
+                Add to Cart <ToastContainer position="bottom-left" />
               </button>
             </div>
           ))}

@@ -1,8 +1,9 @@
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import {Link} from "react-router-dom"
 import { useDispatch, useSelector } from 'react-redux'
+import { fetchProducts, fetchProductsBySearch } from '../../features/product/productSlice'
 
 
 const navigation = [
@@ -16,6 +17,22 @@ function classNames(...classes) {
 
 export default function Navbar() {
   const dispatch = useDispatch()
+  const [search, setSearch] = useState('')
+
+  const handleInput = (e)=>{
+    let value = e.target.value
+    setSearch(value)
+    setTimeout(() => {
+      
+      if(value.length==0){
+        dispatch(fetchProducts())
+      }else{
+  
+        dispatch(fetchProductsBySearch(search))
+      }
+    }, 2000);
+
+  }
 
   const cart = useSelector(state=>state.cart.cart)
   return (
@@ -63,6 +80,7 @@ export default function Navbar() {
                   </div>
                 </div>
               </div>
+              <input type="text" placeholder='Search' className='p-2 text-black' value={search} onChange={(e)=>handleInput(e)} />
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 <Link to={"/cart"}>
 

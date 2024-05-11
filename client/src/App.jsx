@@ -1,32 +1,26 @@
-import { Fragment, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
 import Product from "./pages/Product"
-
+import { useDispatch } from 'react-redux'
+import { fetchProductByFilter } from './features/product/productSlice'
 const sortOptions = [
-  { name: 'Most Popular', href: '#', current: true },
-  { name: 'Best Rating', href: '#', current: false },
-  { name: 'Newest', href: '#', current: false },
-  { name: 'Price: Low to High', href: '#', current: false },
-  { name: 'Price: High to Low', href: '#', current: false },
+  { name: 'Best Rating', _sort: 'rating', current: false },
+  { name: 'Price: Low to High', _sort: 'price', current: false },
 ]
-const subCategories = [
-  { name: 'Totes', href: '#' },
-  { name: 'Backpacks', href: '#' },
-  { name: 'Travel Bags', href: '#' },
-  { name: 'Hip Bags', href: '#' },
-  { name: 'Laptop Sleeves', href: '#' },
-]
+
 const filters = [
   {
     id: 'category',
     name: 'Category',
     options: [
-      { value: "men's clothing", label: "men's clothing", checked: false },
-      { value: 'jewelery', label: 'jewelery', checked: false },
-      { value: "electronics", label: 'electronics', checked: true },
-      { value: "women's clothing", label: "women's clothing", checked: false },
+      { value: "smartphones", label: "smartphones", checked: false },
+      { value: 'laptops', label: 'laptops', checked: false },
+      { value: "fragrances", label: 'fragrances', checked: false },
+      { value: "groceries", label: "groceries", checked: false },
+      { value: "home-decoration", label: "home-decoration", checked: false },
+
     ],
   },
 
@@ -38,11 +32,64 @@ function classNames(...classes) {
 
 export default function App() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+const [filter,setFilter] = useState({})
+const [sort,setSort] =  useState('')
+const dispatch = useDispatch()
+
+const handleSort = (e,op) => {
+  console.log(e.target);
+  const _sort = e.target
+
+  setSort(op._sort)
+}
+
+// useEffect(()=>{
+//   dispatch(fetchProductByFilter(filter))
+//   // console.log(filter);
+// },[filter,sort])
+
+useEffect(() => {
+  dispatch(fetchProductByFilter({ filter, sort }));
+}, [filter, sort]);
+
+//   const handleFilter = (e,section,cat) => {
+//     const newFilter={...filter}
+//   // {category: e.target.value} DONE
+//   // TODO 
+//   // multiple checkboxes 
+//   // multiple options 
+
+  
+//   newFilter[e.target.name]=e.target.value
+//   setFilter(newFilter)
+
+// // if(e.target.checked){
+ 
+
+// // }else{
+  
+// //    dispatch(fetchProductByFilter({}))
+// // }
+//   }
+
+const handleFilter = (e, section) => {
+  const { name, checked } = e.target;
+  const newFilter = { ...filter };
+
+  // Update the filter based on the checkbox status
+  if (checked) {
+    newFilter[name] = e.target.defaultValue;
+  } else {
+    delete newFilter[name];
+  }
+
+  setFilter(newFilter);
+};
+
 
   return (
     <div className="bg-white">
       <div>
-
         {/* Mobile filter dialog */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>
           <Dialog className="relative z-40 lg:hidden" onClose={setMobileFiltersOpen}>
@@ -107,8 +154,9 @@ export default function App() {
                                 {section.options.map((option, optionIdx) => (
                                   <div key={option.value} className="flex items-center">
                                     <input
+                                    onClick={(e)=>handleFilter(e,section)}
                                       id={`filter-mobile-${section.id}-${optionIdx}`}
-                                      name={`${section.id}[]`}
+                                      name={`${section.id}`}
                                       defaultValue={option.value}
                                       type="checkbox"
                                       defaultChecked={option.checked}
@@ -165,8 +213,8 @@ export default function App() {
                       {sortOptions.map((option) => (
                         <Menu.Item key={option.name}>
                           {({ active }) => (
-                            <a
-                              href={option.href}
+                            <p
+                              onClick= { (e)=>handleSort(e,option)}
                               className={classNames(
                                 option.current ? 'font-medium text-gray-900' : 'text-gray-500',
                                 active ? 'bg-gray-100' : '',
@@ -174,7 +222,7 @@ export default function App() {
                               )}
                             >
                               {option.name}
-                            </a>
+                            </p>
                           )}
                         </Menu.Item>
                       ))}
@@ -230,8 +278,9 @@ export default function App() {
                             {section.options.map((option, optionIdx) => (
                               <div key={option.value} className="flex items-center">
                                 <input
+                                  onClick={(e)=>handleFilter(e,section,option)}
                                   id={`filter-${section.id}-${optionIdx}`}
-                                  name={`${section.id}[]`}
+                                  name={`${section.id}`}
                                   defaultValue={option.value}
                                   type="checkbox"
                                   defaultChecked={option.checked}

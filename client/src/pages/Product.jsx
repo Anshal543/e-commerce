@@ -4,6 +4,7 @@ import axios from "axios";
 import { fetchProducts } from "../features/product/productSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { addCart, removeCart } from "../features/cart/cartSlice";
+import {addPost} from "../features/post/postSlice"
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -17,7 +18,8 @@ function Product() {
 
   const handleAddCart = (product) => {
     const newObj = { ...product, quantity: 1 };
-    dispatch(addCart(newObj));
+    dispatch(addPost(newObj));
+    console.log(newObj);
     toast.success(`${product.title} added to cart!`);
   };
 

@@ -1,26 +1,33 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { removeCart,updateCart } from "../features/cart/cartSlice";
+import {fetchPosts,deletePost,updatePost} from "../features/post/postSlice"
 
 export default function CartPage() {
   const dispatch = useDispatch();
 
-  const cart = useSelector((state) => state.cart.cart);
+  // const cart = useSelector((state) => state.cart.cart);
+  // useEffect(()=>{
+  //   dispatch(fetchPosts())
+  // },[])
+  const cart = useSelector((state) => state.posts.posts);
+  console.log(cart);
 
   const totalAmount = cart?.reduce((acc,product)=>acc+product.price*product.quantity,0).toFixed(2)
   const totalItems = cart?.reduce((acc,product)=>acc+product.quantity,0)
 
   const handleRemove = (id) => {
-    dispatch(removeCart(id));
+    dispatch(deletePost(id));
   };
 
   const handleQuantity = (e, product) => {
-    const obj = {...product, quantity: +e.target.value}
-    dispatch(updateCart(obj))
-  }
+    const updatedProduct = {...product, quantity: +e.target.value};
+    dispatch(updatePost({ id: product.id, postData: updatedProduct }));
+};
+
 
   return (
     <div className="mx-auto max-w-7xl mt-12  bg-white px-4 sm:px-6 lg:px-8">

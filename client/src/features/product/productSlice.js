@@ -16,7 +16,7 @@ export const fetchProducts = createAsyncThunk(
   'products/fetchProducts',
   async () => {
     try {
-      const response = await axios.get('http://localhost:8800/products');
+      const response = await axios.get('http://localhost:3000/test');
       const data = response.data;
       return data
 
@@ -43,7 +43,7 @@ export const fetchSingleProduct = createAsyncThunk(
   'products/fetchSingleProduct',
   async (id) => {
     try {
-      const response = await axios.get('http://localhost:8800/products/' + id);
+      const response = await axios.get('http://localhost:3000/test/' + id);
       const data = response.data;
       return data
 
@@ -89,7 +89,7 @@ export const fetchProductByFilter = createAsyncThunk(
       console.log(queryParams);
 
 
-      const response = await axios.get('http://localhost:8800/products?' + queryParams);
+      const response = await axios.get('http://localhost:3000/test?' + queryParams);
       return response.data;
     } catch (error) {
       throw error;

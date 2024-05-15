@@ -13,7 +13,7 @@ export const fetchPosts = createAsyncThunk(
     'posts/fetchPosts',
     async () => {
         try {
-            const response = await axios.get('http://localhost:8800/posts');
+            const response = await axios.get('http://localhost:3000/posts');
             //   Assuming each post object from the API has a quantity property
             const postsWithQuantity = response.data.map(post => ({ ...post, quantity: 1 }));
             return postsWithQuantity;
@@ -29,7 +29,7 @@ export const addPost = createAsyncThunk(
     'posts/addPost',
     async (postData) => {
         try {
-            const response = await axios.post('http://localhost:8800/posts', postData);
+            const response = await axios.post('http://localhost:3000/posts', postData);
             console.log(response.data);
             return response.data;
         } catch (error) {
@@ -43,7 +43,7 @@ export const updatePost = createAsyncThunk(
     'posts/updatePost',
     async ({ id, postData }) => {
         try {
-            const response = await axios.put(`http://localhost:8800/posts/${id}`, postData);
+            const response = await axios.put(`http://localhost:3000/posts/${id}`, postData);
             return response.data;
         } catch (error) {
             throw error;
@@ -55,7 +55,19 @@ export const deletePost = createAsyncThunk(
     'posts/deletePost',
     async (id) => {
         try {
-            const response = await axios.delete(`http://localhost:8800/posts/${id}`);
+            const response = await axios.delete(`http://localhost:3000/posts/${id}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+);
+
+export const emptyCart = createAsyncThunk(
+    'posts/emptyCart',
+    async () => {
+        try {
+            const response = await axios.delete(`http://localhost:3000/posts`);
             return response.data;
         } catch (error) {
             throw error;

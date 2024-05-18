@@ -30,4 +30,4 @@ productSchema.set('toJSON', {
 })
 
 
-exports.Product = mongoose.model('Product', productSchema)
+export const ProductModel = mongoose.model('Product', productSchema)

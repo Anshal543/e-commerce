@@ -8,7 +8,7 @@ const LoginPage = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
     const dispatch = useDispatch();
@@ -17,15 +17,16 @@ const LoginPage = () => {
     const userInfo = useSelector((state) => state.auth.userInfo);
 
     useEffect(()=>{
-        if(userInfo.email){
+        if(userInfo){
             navigate('/')
         }
-    },[])
+    },[userInfo])
 
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/sign-in`, {email, password});
+            setLoading(true);
+            const response = await axios.post(`${import.meta.env.VITE_BACKEND}/auth/sign-in`, {email, password});
             console.log(response.data);
             if(response.status === 200){
                 dispatch(login(response.data));
@@ -35,7 +36,7 @@ const LoginPage = () => {
         } catch (error) {
             setLoading(false);
             console.error(error.response.data.message);
-            setError(error.response);
+            setError(error.response.data.message);
         }
     };
 
@@ -116,6 +117,7 @@ const LoginPage = () => {
               >
                 {loading ? "Loading..." : "Sign in"}
               </button>
+              <p className='text-center text-red-600 font-bold pt-3'>{error && error}</p>
             </div>
           </form>
 

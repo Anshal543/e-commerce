@@ -4,6 +4,8 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import {Link} from "react-router-dom"
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchProducts, fetchProductsBySearch } from '../../features/product/productSlice'
+import { logout } from '../../features/auth/authSlice'
+import axios from 'axios'
 
 
 const navigation = [
@@ -32,6 +34,15 @@ export default function Navbar() {
       }
     }, 2000);
 
+  }
+
+
+  const handleLogout = async()=>{
+    const response = await axios.get(`${import.meta.env.VITE_BACKEND}/auth/logout`)
+    if(status==200){
+      dispatch(logout())
+      window.location.reload()
+    }
   }
 
   const cart = useSelector(state=>state.posts.posts)
@@ -145,6 +156,7 @@ export default function Navbar() {
                       <Menu.Item>
                         {({ active }) => (
                           <button
+                          onClick={handleLogout}
                            
                             className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                           >

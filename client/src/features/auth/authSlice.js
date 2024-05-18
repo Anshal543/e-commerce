@@ -5,7 +5,7 @@ import axios from 'axios';
 
 // Define the initial state
 const initialState = {
-  userInfo:{}
+  userInfo:null
 };
 
 // Define the thunk for fetching products from the API
@@ -13,7 +13,7 @@ export const loginInfo = createAsyncThunk(
   'userInfo/loginInfo',
   async ({email, password}) => {
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth`, {email, password});
+      const response = await axios.post(`${import.meta.env.VITE_BACKEND}/auth`, {email, password});
       return response.data;
     } catch (error) {
       throw error;
@@ -46,6 +46,9 @@ const authSlice = createSlice({
     login: (state, action) => {
       state.userInfo = action.payload;
     },
+    logout: (state) => {
+      state.userInfo = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -60,5 +63,5 @@ const authSlice = createSlice({
 });
 
 // Export the actions and reducer
-export const {login } = authSlice.actions;
+export const {login, logout } = authSlice.actions;
 export default authSlice.reducer;

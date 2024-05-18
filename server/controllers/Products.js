@@ -16,7 +16,7 @@ export const getProducts = async (req, res) => {
         let query = ProductModel.find({});
 
         if (req.query.category) {
-            query = query.find({ category: req.query.category });
+            query = query.find({ category: { $in: req.query.category.split(',') }});
         }
 
         if (req.query.brand) {

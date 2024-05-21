@@ -5,7 +5,7 @@ export const addProduct = async (req, res) => {
         const products = await ProductModel.create(req.body);
         res.status(200).json(products);
     } catch (err) {
-        console.log(err);
+        next(err);
     }
 }
 
@@ -28,7 +28,7 @@ export const getProducts = async (req, res) => {
         let docs = await query.exec()
         res.status(200).json(docs);
     } catch (err) {
-        console.log(err);
+        next(err);
     }
 }
 
@@ -47,6 +47,25 @@ export const getProductBySearch = async (req, res) => {
         );
         res.status(200).json(products);
     } catch (err) {
-        console.log(err);
+        next(err);
     }
 }  
+
+export const getSingleProduct = async (req, res) => {
+    try {
+        const product = await ProductModel.findById(req.params.id);
+        res.status(200).json(product);
+    } catch (err) {
+        next(err);
+    }
+}
+
+export const updateProduct = async (req, res) => {
+    try {
+        const product = await ProductModel.findByIdAndUpdate(req.params.id, req.body, { new: true });   
+        res.status(200).json(product);
+    }
+    catch (err) {
+        next(err);
+    }
+}

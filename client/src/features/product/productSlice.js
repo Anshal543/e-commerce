@@ -43,7 +43,7 @@ export const fetchSingleProduct = createAsyncThunk(
   'products/fetchSingleProduct',
   async (id) => {
     try {
-      const response = await axios.get('http://localhost:3000/test/' + id);
+      const response = await axios.get('http://localhost:5000/api/v1/products/' + id);
       const data = response.data;
       return data
 
@@ -89,7 +89,7 @@ export const fetchProductByFilter = createAsyncThunk(
       console.log(queryParams);
 
 
-      const response = await axios.get('http://localhost:3000/test?' + queryParams);
+      const response = await axios.get('http://localhost:5000/api/v1/products?' + queryParams);
       return response.data;
     } catch (error) {
       throw error;

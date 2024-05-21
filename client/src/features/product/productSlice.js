@@ -16,7 +16,7 @@ export const fetchProducts = createAsyncThunk(
   'products/fetchProducts',
   async () => {
     try {
-      const response = await axios.get('http://localhost:3000/test');
+      const response = await axios.get('http://localhost:5000/api/v1/products');
       const data = response.data;
       return data
 
@@ -29,9 +29,9 @@ export const fetchProductsBySearch = createAsyncThunk(
   'products/fetchProductsBySearch',
   async (search) => {
     try {
-      const response = await axios.get('https://dummyjson.com/products/search?q=' + search);
+      const response = await axios.get('http://localhost:5000/api/v1/products/search?q=' + search);
       const data = response.data;
-      return data.products
+      return data
 
     } catch (error) {
       throw error;

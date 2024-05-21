@@ -16,7 +16,7 @@ export const getProducts = async (req, res) => {
         let query = ProductModel.find({});
 
         if (req.query.category) {
-            query = query.find({ category: { $in: req.query.category.split(',') }});
+            query = query.find({ category: { $in: req.query.category.split(',') } });
         }
 
         if (req.query.brand) {
@@ -31,3 +31,22 @@ export const getProducts = async (req, res) => {
         console.log(err);
     }
 }
+
+
+export const getProductBySearch = async (req, res) => {
+    const { q } = req.query;
+    try {
+        const products = await ProductModel.find({
+
+            $or: [
+                { name: { $regex: q, $options: 'i' } },
+                { category: { $regex: q, $options: 'i' } },
+                { brand: { $regex: q, $options: 'i' } }
+            ]
+        }
+        );
+        res.status(200).json(products);
+    } catch (err) {
+        console.log(err);
+    }
+}  

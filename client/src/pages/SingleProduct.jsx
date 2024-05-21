@@ -3,7 +3,7 @@ import { StarIcon } from '@heroicons/react/20/solid'
 import { RadioGroup } from '@headlessui/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchSingleProduct } from '../features/product/productSlice'
-import { useParams } from 'react-router-dom'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
 
 const product = {
   name: 'Basic Tee 6-Pack',
@@ -66,11 +66,17 @@ function classNames(...classes) {
 export default function SingleProduct() {
   const [selectedColor, setSelectedColor] = useState(product.colors[0])
   const [selectedSize, setSelectedSize] = useState(product.sizes[2])
+  const userInfo = useSelector(state=>state.auth.userInfo)
+  const navigate = useNavigate()
 
   const dispatch = useDispatch()
 
   const {id} = useParams()
   // console.log(typeof id);
+
+  if(!userInfo){
+    return navigate("/sign-in")
+  }
 
   useEffect(()=>{
     dispatch(fetchSingleProduct(id))

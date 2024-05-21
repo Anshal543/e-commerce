@@ -1,22 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { fetchProducts } from "../features/product/productSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { addCart, removeCart } from "../features/cart/cartSlice";
-import {addPost} from "../features/post/postSlice"
+import { addPost } from "../features/post/postSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Product() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { products, loading, error } = useSelector((state) => state.products);
+  const userInfo = useSelector((state) => state.auth.userInfo);
 
   useEffect(() => {
     dispatch(fetchProducts());
   }, []);
 
   const handleAddCart = (product) => {
+    if (!userInfo) {
+      toast.error("Please login to add to cart", {
+        position: "bottom-left",
+      });
+      navigate("/sign-in");
+      return;
+    }
     const newObj = { ...product, quantity: 1 };
     dispatch(addPost(newObj));
     console.log(newObj);

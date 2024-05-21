@@ -22,6 +22,9 @@ export const getProducts = async (req, res) => {
         if (req.query.brand) {
             query = query.find({ brand: req.query.brand });
         }
+        if(req.query._sort){
+            query = query.sort({[req.query._sort]: req.query._order === 'asc' ? 1 : -1})
+        }
 
         // TODO : Sorting and Pagination
 

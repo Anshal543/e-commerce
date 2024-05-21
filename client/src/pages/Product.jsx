@@ -26,7 +26,7 @@ function Product() {
       navigate("/sign-in");
       return;
     }
-    const newObj = { ...product, quantity: 1 };
+    const newObj = { ...product, quantity: 1, user:userInfo._id };
     dispatch(addPost(newObj));
     console.log(newObj);
     toast.success(`${product.title} added to cart!`);

@@ -26,9 +26,11 @@ export const getProducts = async (req, res) => {
             query = query.sort({[req.query._sort]: req.query._order === 'asc' ? 1 : -1})
         }
 
-        // TODO : Sorting and Pagination
+        let limit = Number(req.query._limit) || 10;
+        let page = Number(req.query._page) || 1;
+        let skip = (page - 1) * limit;
 
-        let docs = await query.exec()
+        let docs = await query.skip(skip).limit(limit).exec();
         res.status(200).json(docs);
     } catch (err) {
         next(err);

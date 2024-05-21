@@ -72,7 +72,7 @@ export const fetchSingleProduct = createAsyncThunk(
 
 export const fetchProductByFilter = createAsyncThunk(
   "products/fetchProductByFilter",
-  async ({ filter, sort }) => {
+  async ({ filter, sort, page }) => {
     try {
       let queryParams = '';
 
@@ -87,9 +87,10 @@ export const fetchProductByFilter = createAsyncThunk(
       }
 
       console.log(queryParams);
+      queryParams += `_page=${page}&_limit=10`;
 
 
-      const response = await axios.get('http://localhost:5000/api/v1/products?' + queryParams);
+      const response = await axios.get(`http://localhost:5000/api/v1/products?${queryParams}` + queryParams);
       return response.data;
     } catch (error) {
       throw error;

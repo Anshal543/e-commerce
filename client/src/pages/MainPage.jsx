@@ -41,6 +41,9 @@ export default function MainPage() {
   const [sort, setSort] = useState("");
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
+  // const totalItems = useSelector((state) => state.products.totalItems);  // ask this from umer
+
+
 
   const handleSort = (e, op) => {
     console.log(e.target);
@@ -353,7 +356,8 @@ export default function MainPage() {
               </div>
             </div>
           </section>
-          <Paginate page={page} setPage={setPage} />
+          {/* <Paginate page={page} setPage={setPage} totalItems={totalItems} /> */}
+          <Paginate page={page} setPage={setPage}  />
         </main>
       </div>
     </div>

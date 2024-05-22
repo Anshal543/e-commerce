@@ -16,6 +16,7 @@ import axios from 'axios'
 import { login } from './features/auth/authSlice'
 import { useDispatch } from 'react-redux'
 import ProtectedRoutes from './pages/ProtectedRoutes'
+import SignUp from './pages/SignUp'
 axios.defaults.withCredentials=true 
 function App() {
 const dispatch=useDispatch()
@@ -58,6 +59,7 @@ useEffect(()=>{
           </ProtectedRoutes>
         } />
       <Route path='/sign-in' element={<LoginPage />}/>
+      <Route path="/sign-up" element={<SignUp />} />
       <Route path='/*' element={<NotFound/>} />
       </Routes>
     

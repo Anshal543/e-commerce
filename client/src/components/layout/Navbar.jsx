@@ -205,9 +205,20 @@ export default function Navbar() {
                     </Menu>
                   </>
                 ) : (
-                  <button 
-                    onClick={() => window.location.href = "/sign-in"}
-                  className="text-white font-bold p-2 rounded-md bg-blue-800 hover:bg-blue-700" >login</button>
+                  <>
+                    <button
+                      onClick={() => (window.location.href = "/sign-in")}
+                      className="text-white font-bold p-2 rounded-md bg-blue-800 hover:bg-blue-700 mr-2"
+                    >
+                      login
+                    </button>
+                    <button
+                      onClick={() => (window.location.href = "/sign-up")}
+                      className="text-white font-bold p-2 rounded-md bg-blue-800 hover:bg-blue-700"
+                    >
+                      signup
+                    </button>
+                  </>
                 )}
               </div>
             </div>

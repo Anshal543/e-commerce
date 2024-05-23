@@ -21,7 +21,7 @@ function CheckOutPage() {
   const items = useSelector((state) => state.posts.posts);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [paymentMethod, setPaymentMethod] = useState("cash");
-  const totalAmount = items.reduce((amount, item) => item.price * item.quantity + amount,0);
+  const totalAmount = items.reduce((amount, item) => item.product.price * item.quantity + amount,0);
   const totalItems = items.reduce((total, item) => item.quantity + total, 0);
   const {register,handleSubmit,reset,formState: { errors },} = useForm();
     const [userInfo,setUserInfo] = useState({})
@@ -368,8 +368,8 @@ function CheckOutPage() {
                         <li key={product.id} className="flex py-2">
                           <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                             <img
-                              src={product.thumbnail}
-                              alt={product.title}
+                              src={product.product.thumbnail}
+                              alt={product.product.title}
                               className="h-full w-full object-cover object-center"
                             />
                           </div>
@@ -378,9 +378,9 @@ function CheckOutPage() {
                             <div>
                               <div className="flex justify-between text-base font-medium text-gray-900">
                                 <h3>
-                                  <Link to={product.href}>{product.title}</Link>
+                                  <Link to={product.href}>{product.product.title}</Link>
                                 </h3>
-                                <p className="ml-4">{product.price} PKR</p>
+                                <p className="ml-4">{product.product.price} PKR</p>
                               </div>
                               <p className="mt-1 text-sm text-gray-500">{product.brand}</p>
                             </div>

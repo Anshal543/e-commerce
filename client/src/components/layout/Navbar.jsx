@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
@@ -9,6 +9,7 @@ import {
 } from "../../features/product/productSlice";
 import { logout } from "../../features/auth/authSlice";
 import axios from "axios";
+import { fetchPosts } from "../../features/post/postSlice";
 
 const navigation = [{ name: "Dashboard", href: "/", current: true }];
 
@@ -21,6 +22,12 @@ export default function Navbar() {
   const [search, setSearch] = useState("");
 
   const userInfo = useSelector((state) => state.auth.userInfo);
+
+  // useEffect(() => {
+  //   if (userInfo) {
+  //     dispatch(fetchPosts()); // Fetch cart items when userInfo is available
+  //   }
+  // }, [dispatch]);
 
   const handleInput = (e) => {
     let value = e.target.value;
@@ -51,6 +58,12 @@ export default function Navbar() {
       console.error("Logout failed:", error.message);
     }
   };
+
+  useEffect(() => {
+    if (userInfo) {
+      dispatch(fetchPosts(userInfo._id)); // Fetch cart items when userInfo is available
+    }
+  }, [dispatch, userInfo]);
 
   const cart = useSelector((state) => state.posts.posts);
   return (

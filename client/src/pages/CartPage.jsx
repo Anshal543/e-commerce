@@ -1,50 +1,46 @@
-import { Fragment, useEffect, useState } from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { removeCart,updateCart } from "../features/cart/cartSlice";
-import {fetchPosts,deletePost,updatePost} from "../features/post/postSlice"
+import { deletePost, updatePost, fetchPosts } from "../features/post/postSlice";
 
 export default function CartPage() {
   const dispatch = useDispatch();
+  const userId = useSelector((state) => state.auth.userInfo?._id);
 
-  // const cart = useSelector((state) => state.cart.cart);
-  // useEffect(()=>{
-  //   dispatch(fetchPosts())
-  // },[])
+  useEffect(() => {
+    dispatch(fetchPosts(userId));
+  }, [userId]);
+
   const cart = useSelector((state) => state.posts.posts);
-  console.log(cart);
 
-  const totalAmount = cart?.reduce((acc,product)=>acc+product.price*product.quantity,0).toFixed(2)
-  const totalItems = cart?.reduce((acc,product)=>acc+product.quantity,0)
+  const totalAmount = cart
+    ?.reduce((acc, item) => acc + item.product.price * item.quantity, 0)
+    .toFixed(2);
+
+  const totalItems = cart?.reduce((acc, item) => acc + item.quantity, 0);
 
   const handleRemove = (id) => {
     dispatch(deletePost(id));
   };
 
-  const handleQuantity = (e, product) => {
-    const updatedProduct = {...product, quantity: +e.target.value};
-    dispatch(updatePost({ id: product.id, postData: updatedProduct }));
-};
-
+  const handleQuantity = (e, item) => {
+    const updatedProduct = { ...item.product, quantity: +e.target.value };
+    dispatch(updatePost({ id: item.id, postData: { ...item, product: updatedProduct } }));
+  };
 
   return (
-    <div className="mx-auto max-w-7xl mt-12  bg-white px-4 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl mt-12 bg-white px-4 sm:px-6 lg:px-8">
       <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-        <h1 className="text-4xl font-bold tracking-tight  text-gray-900">
-          {" "}
-          Cart
-        </h1>
+        <h1 className="text-4xl font-bold tracking-tight text-gray-900">Cart</h1>
 
         <div className="flow-root">
           <ul role="list" className="-my-6 divide-y divide-gray-200">
-            {cart?.map((product) => (
-              <li key={product.id} className="flex py-6">
+            {cart?.map((item) => (
+              <li key={item.id} className="flex py-6">
                 <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                   <img
-                    src={product.images[0]}
-                    alt={product.title}
+                    src={item.product.images[0]}
+                    alt={item.product.title}
                     className="h-full w-full object-cover object-center"
                   />
                 </div>
@@ -53,13 +49,11 @@ export default function CartPage() {
                   <div>
                     <div className="flex justify-between text-base font-medium text-gray-900">
                       <h3>
-                        <Link to={product.href}>{product.title}</Link>
+                        <Link to={item.href}>{item.product.title}</Link>
                       </h3>
-                      <p className="ml-4">{product.price} PKR</p>
+                      <p className="ml-4">{item.product.price} PKR</p>
                     </div>
-                    <p className="mt-1 text-sm text-gray-500">
-                      {product.brand}
-                    </p>
+                    <p className="mt-1 text-sm text-gray-500">{item.product.brand}</p>
                   </div>
                   <div className="flex flex-1 items-end justify-between text-sm">
                     <div className="text-gray-500">
@@ -69,18 +63,21 @@ export default function CartPage() {
                       >
                         QTY
                       </label>
-                      <select value={product.quantity} onChange={(e) => handleQuantity(e, product)}>
-                        <option value="1"> 1 </option>
-                        <option value="2"> 2 </option>
-                        <option value="3"> 3 </option>
-                        <option value="4"> 4 </option>
-                        <option value="5"> 5 </option>
+                      <select
+                        value={item.product.quantity}
+                        onChange={(e) => handleQuantity(e, item)}
+                      >
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
                       </select>
                     </div>
 
                     <div className="flex">
                       <button
-                        onClick={(e) => handleRemove(product.id)}
+                        onClick={() => handleRemove(item.id)}
                         type="button"
                         className="font-medium text-indigo-600 hover:text-indigo-500"
                       >
@@ -98,17 +95,15 @@ export default function CartPage() {
       <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
         <div className="flex justify-between text-base font-medium text-gray-900">
           <p>Subtotal</p>
-          <p>{totalAmount} PKR </p>
+          <p>{totalAmount} PKR</p>
         </div>
 
         <div className="flex justify-between py-2 text-base font-medium text-gray-900">
-          <p>total Items</p>
+          <p>Total Items</p>
           <p>{totalItems} Items</p>
         </div>
 
-        <p className="mt-0.5 text-sm text-gray-500">
-          Shipping and taxes calculated at checkout.
-        </p>
+        <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
         <div className="mt-6">
           <Link
             to="/checkout"

@@ -1,9 +1,9 @@
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { signUp } from "../features/auth/authSlice"; // Adjust the import path as needed
 import { useNavigate } from "react-router-dom";
-
+import axios from "axios";
+import { toast } from 'react-toastify';
 const SignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -14,10 +14,15 @@ const SignUp = () => {
   } = useForm();
   const { loading, error } = useSelector((state) => state.auth);
 
-  const onSubmit = (data) => {
-    dispatch(signUp(data));
-    if (!loading) {
-      navigate("/sign-in");
+  const onSubmit = async(data) => {
+
+    const {name,email,password} = data
+   let res = await axios.post(`${import.meta.env.VITE_BACKEND}/auth/sign-up`, { name, email, password })
+    if(res.status==200){
+      toast.success('Account created successfully',{
+        position: 'bottom-left'
+      })
+      navigate('/sign-in')
     }
   };
 
@@ -125,12 +130,12 @@ const SignUp = () => {
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-500">
-            Not a member?{" "}
+            Already a member?{" "}
             <a
-              href="#"
+              href="/sign-in"
               className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
             >
-              Start a 14 day free trial
+             Login here
             </a>
           </p>
         </div>
@@ -139,4 +144,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignUp;

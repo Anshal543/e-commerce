@@ -4,6 +4,14 @@ import { signUp } from "../features/auth/authSlice"; // Adjust the import path a
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from 'react-toastify';
+import {z} from 'zod'
+import {zodResolver} from '@hookform/resolvers/zod'
+
+const schema = z.object({
+  name: z.string().min(3, { message: 'Username is required' }),
+  email: z.string().email("Invalid email address").nonempty("Email is required"),
+  password: z.string().min(8,{message: 'Password must be at least 8 characters'}),
+});
 const SignUp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -11,7 +19,9 @@ const SignUp = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    resolver: zodResolver(schema),
+  });
   const { loading, error } = useSelector((state) => state.auth);
 
   const onSubmit = async(data) => {

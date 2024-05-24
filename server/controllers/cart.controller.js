@@ -20,10 +20,31 @@ export const getCart = async (req, res) => {
             return res.status(404).json({ message: "Cart is empty" });
         }
 
-        
+        const transformedCartItems = cart.map(cartItem => {
+            return {
+                id: cartItem._id,
+                quantity: cartItem.quantity,
+                product: cartItem.product,
+            }
+        })        
 
-        res.status(200).json(cart);
+        
+        res.status(200).json(transformedCartItems);
     } catch (error) {
         next(error)
     }
 }
+
+
+export const deleteCartItem = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deletedCartItem = await Cart.findByIdAndDelete(id);
+        if (!deletedCartItem) {
+            return res.status(404).json({ message: "Cart item not found" });
+        }
+        res.status(200).json(deletedCartItem);
+    } catch (error) {
+        next(error)
+    }
+}       

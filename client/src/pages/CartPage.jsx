@@ -25,13 +25,20 @@ export default function CartPage() {
 
   const handleQuantity = (e, item) => {
     const updatedProduct = { ...item.product, quantity: +e.target.value };
-    dispatch(updatePost({ id: item.id, postData: { ...item, product: updatedProduct } }));
+    dispatch(
+      updatePost({
+        id: item.id,
+        postData: { ...item, product: updatedProduct },
+      })
+    );
   };
 
   return (
     <div className="mx-auto max-w-7xl mt-12 bg-white px-4 sm:px-6 lg:px-8">
       <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900">Cart</h1>
+        <h1 className="text-4xl font-bold tracking-tight text-gray-900">
+          Cart
+        </h1>
 
         <div className="flow-root">
           <ul role="list" className="-my-6 divide-y divide-gray-200">
@@ -51,9 +58,11 @@ export default function CartPage() {
                       <h3>
                         <Link to={item.href}>{item.product.title}</Link>
                       </h3>
-                      <p className="ml-4">{item.product.price} PKR</p>
+                      <p className="ml-4">{item.product?.price} PKR</p>
                     </div>
-                    <p className="mt-1 text-sm text-gray-500">{item.product.brand}</p>
+                    <p className="mt-1 text-sm text-gray-500">
+                      {item.product.brand}
+                    </p>
                   </div>
                   <div className="flex flex-1 items-end justify-between text-sm">
                     <div className="text-gray-500">
@@ -64,7 +73,7 @@ export default function CartPage() {
                         QTY
                       </label>
                       <select
-                        value={item.product.quantity}
+                        value={item.quantity}
                         onChange={(e) => handleQuantity(e, item)}
                       >
                         <option value="1">1</option>
@@ -103,7 +112,9 @@ export default function CartPage() {
           <p>{totalItems} Items</p>
         </div>
 
-        <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
+        <p className="mt-0.5 text-sm text-gray-500">
+          Shipping and taxes calculated at checkout.
+        </p>
         <div className="mt-6">
           <Link
             to="/checkout"

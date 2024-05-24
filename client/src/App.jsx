@@ -14,9 +14,10 @@ import CheckOutPage from './pages/CheckOutPage'
 import LoginPage from './pages/LoginPage'
 import axios from 'axios'
 import { login } from './features/auth/authSlice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import ProtectedRoutes from './pages/ProtectedRoutes'
 import SignUp from './pages/SignUp'
+import { fetchPosts } from './features/post/postSlice'
 axios.defaults.withCredentials=true 
 function App() {
 const dispatch=useDispatch()
@@ -30,6 +31,13 @@ useEffect(()=>{
   }
   getData()
 },[])
+const userInfo = useSelector((state) => state.auth.userInfo);
+
+useEffect(() => {
+  if (userInfo) {
+    dispatch(fetchPosts(userInfo._id)); // Fetch cart items when userInfo is available
+  }
+}, [dispatch, userInfo]);
 
 
   return (

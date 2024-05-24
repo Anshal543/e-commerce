@@ -59,11 +59,7 @@ export default function Navbar() {
     }
   };
 
-  useEffect(() => {
-    if (userInfo) {
-      dispatch(fetchPosts(userInfo._id)); // Fetch cart items when userInfo is available
-    }
-  }, [dispatch, userInfo]);
+ 
 
   const cart = useSelector((state) => state.posts.posts);
   return (

@@ -15,9 +15,10 @@ export const fetchPosts = createAsyncThunk(
         try {
             const response = await axios.get(`${import.meta.env.VITE_BACKEND}/cart?id=${userId}`);
             //   Assuming each post object from the API has a quantity property
-            const postsWithQuantity = response.data.map(post => ({ ...post, quantity: 1 }));
-            return postsWithQuantity;
-            // return response.data
+            // const postsWithQuantity = response.data.map(post => ({ ...post, quantity: 1 }));
+            // console.log(response.data);
+            // return postsWithQuantity;
+            return response.data
         } catch (error) {
             throw error;
         }
@@ -30,7 +31,7 @@ export const addPost = createAsyncThunk(
     async (postData) => {
         try {
             const response = await axios.post(`${import.meta.env.VITE_BACKEND}/cart`, postData);
-            console.log(response.data);
+            // console.log(response.data);
             return response.data;
         } catch (error) {
             throw error;
@@ -55,7 +56,7 @@ export const deletePost = createAsyncThunk(
     'posts/deletePost',
     async (id) => {
         try {
-            const response = await axios.delete(`http://localhost:3000/posts/${id}`);
+            const response = await axios.delete(`${import.meta.env.VITE_BACKEND}/cart/${id}`);
             return response.data;
         } catch (error) {
             throw error;
@@ -87,7 +88,12 @@ const postsSlice = createSlice({
             })
             .addCase(fetchPosts.fulfilled, (state, action) => {
                 state.loading = false;
-                state.posts = action.payload;
+                const existingPost = state.posts.find(post => post.product.id === action.payload.product.id);
+                if (existingPost) {
+                    existingPost.quantity++;
+                } else {
+                    state.posts = action.payload;
+                }
                 state.error = null;
             })
             .addCase(fetchPosts.rejected, (state, action) => {
@@ -97,14 +103,15 @@ const postsSlice = createSlice({
 
             .addCase(addPost.fulfilled, (state, action) => {
                 // Check if the post already exists, and if so, increase its quantity
-                const existingPostIndex = state.posts.findIndex(post => post.id === action.payload.id);
-                if (existingPostIndex >= 0) {
-                    // Increase the quantity of the existing post
-                    state.posts[existingPostIndex].quantity += 1;
-                } else {
+                const existingPostIndex = state.posts.findIndex(post => post.product.id === action.payload.product.id);
+                if (existingPostIndex !== -1) {
+                    state.posts[existingPostIndex].quantity++;
+                } else  {
+
                     // Otherwise, add the new post to the state with quantity 1
                     state.posts.push(action.payload );
                 }
+            
             })
 
 

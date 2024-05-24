@@ -16,7 +16,7 @@ export const fetchPosts = createAsyncThunk(
             const response = await axios.get(`${import.meta.env.VITE_BACKEND}/cart?id=${userId}`);
             //   Assuming each post object from the API has a quantity property
             // const postsWithQuantity = response.data.map(post => ({ ...post, quantity: 1 }));
-            // console.log(response.data);
+            console.log(response.data);
             // return postsWithQuantity;
             return response.data
         } catch (error) {
@@ -42,9 +42,11 @@ export const addPost = createAsyncThunk(
 // Define the thunk for updating a post
 export const updatePost = createAsyncThunk(
     'posts/updatePost',
-    async ({ id, postData }) => {
+    async (id, quantity) => {
         try {
-            const response = await axios.put(`http://localhost:3000/posts/${id}`, postData);
+            
+            const response = await axios.patch(`${import.meta.env.VITE_BACKEND}/cart/${id}`, quantity);
+            console.log(response.data);
             return response.data;
         } catch (error) {
             throw error;
@@ -106,21 +108,22 @@ const postsSlice = createSlice({
                 const existingPostIndex = state.posts.findIndex(post => post.product.id === action.payload.product.id);
                 if (existingPostIndex !== -1) {
                     state.posts[existingPostIndex].quantity++;
-                } else  {
+                } else {
 
                     // Otherwise, add the new post to the state with quantity 1
-                    state.posts.push(action.payload );
+                    state.posts.push(action.payload);
                 }
-            
+
             })
 
 
             .addCase(updatePost.fulfilled, (state, action) => {
                 const index = state.posts.findIndex(post => post.id === action.payload.id);
                 if (index !== -1) {
-                    state.posts[index] = action.payload;
+                    state.posts[index].quantity = action.payload.quantity; // Use action.payload.quantity
                 }
             })
+            
 
             .addCase(deletePost.fulfilled, (state, action) => {
                 // Filter out the deleted post from the state

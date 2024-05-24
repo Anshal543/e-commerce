@@ -26,9 +26,9 @@ export const getCart = async (req, res) => {
                 quantity: cartItem.quantity,
                 product: cartItem.product,
             }
-        })        
+        })
 
-        
+
         res.status(200).json(transformedCartItems);
     } catch (error) {
         next(error)
@@ -47,4 +47,24 @@ export const deleteCartItem = async (req, res) => {
     } catch (error) {
         next(error)
     }
-}       
+}
+
+
+export const updateCartItem = async (req, res) => {
+    try {
+        const { id } = req.params;
+        // const { quantity } = req.body;
+        // const {id} = req.user._id
+        const updatedCartItem = await Cart.findByIdAndUpdate(id, req.body, { new: true });
+        if (!updatedCartItem) {
+            return res.status(404).json({ message: "Cart item not found" });
+        }
+
+        const cart  = await updatedCartItem.populate('product')
+        res.status(200).json(cart);
+    }
+    catch (error) {
+        next(error)
+    }
+
+}

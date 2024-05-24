@@ -24,13 +24,10 @@ export default function CartPage() {
   };
 
   const handleQuantity = (e, item) => {
-    const updatedProduct = { ...item.product, quantity: +e.target.value };
-    dispatch(
-      updatePost({
-        id: item.id,
-        postData: { ...item, product: updatedProduct },
-      })
-    );
+    const quantity = +e.target.value;
+    const  id = item.id;
+    dispatch(updatePost(id,quantity));
+    console.log(item.id);
   };
 
   return (

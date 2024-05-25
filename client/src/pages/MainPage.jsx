@@ -46,7 +46,7 @@ export default function MainPage() {
 
 
   const handleSort = (e, op) => {
-    console.log(e.target);
+    // console.log(e.target);
     const _sort = e.target;
 
     setSort(op._sort);

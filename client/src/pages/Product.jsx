@@ -29,7 +29,8 @@ function Product() {
     const newObj = { product:product.id, quantity: 1, user:userInfo._id };
     // console.log(newObj);
     dispatch(addPost(newObj));
-    console.log(newObj);
+    // console.log("newObj");
+    // console.log(newObj);
     toast.success(`${product.title} added to cart!`);
   };
 

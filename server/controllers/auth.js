@@ -7,7 +7,7 @@ export const createUser = async (req, res) => {
   const { name, email, password, phone, addresses } = req.body
   try {
 
-      console.log("auth.js");
+      // console.log("auth.js");
     let hashedpassword = bcrypt.hashSync(password, salt);
     const data = await UserModel.create({ ...req.body, password: hashedpassword })
     
@@ -22,7 +22,7 @@ export const signIn = async (req, res, next) => {
 
   let { email, password } = req.body;
   try {
-    console.log(email, password);
+    // console.log(email, password);
     let validUser = await UserModel.findOne({ email });
     // TODO : error Handling
     if (!validUser) return next(customError(401, "User not Found"));
@@ -63,7 +63,7 @@ export const userVerification = (req, res) => {
 
 export const userLogout = (req, res) => {
   // console.log(req.cookies);
-  console.log("Logout Req coming");
+  // console.log("Logout Req coming");
   res
     .clearCookie("token", { secure: true, httpOnly: true, sameSite: "none" })
     .send({ message: "Cookies Cleared Successfully" });

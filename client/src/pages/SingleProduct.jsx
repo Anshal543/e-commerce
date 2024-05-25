@@ -83,7 +83,7 @@ export default function SingleProduct() {
   },[])
 
   const currentProduct = useSelector((state)=>state.products.selectedProduct)
-  console.log(currentProduct);
+  // console.log(currentProduct);
 
   if(!currentProduct) return 
   return (

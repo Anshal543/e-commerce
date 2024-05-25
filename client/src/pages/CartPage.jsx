@@ -22,12 +22,14 @@ export default function CartPage() {
   const handleRemove = (id) => {
     dispatch(deletePost(id));
   };
-
+//   useEffect(() => {
+//     console.log(cart);
+// }, [cart]);
   const handleQuantity = (e, item) => {
     const quantity = +e.target.value;
     const  id = item.id;
     dispatch(updatePost(id,quantity));
-    console.log(item.id);
+    // console.log(item.id);
   };
 
   return (

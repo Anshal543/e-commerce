@@ -86,7 +86,7 @@ export const fetchProductByFilter = createAsyncThunk(
         queryParams += `${key}=${filter[key]}&`;
       }
 
-      console.log(queryParams);
+      // console.log(queryParams);
       queryParams += `_page=${page}&_limit=10`;
 
 

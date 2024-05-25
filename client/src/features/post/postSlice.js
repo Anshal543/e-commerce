@@ -45,11 +45,11 @@ export const addPost = createAsyncThunk(
 // Define the thunk for updating a post
 export const updatePost = createAsyncThunk(
     'posts/updatePost',
-    async (id, quantity) => {
+    async (updated) => {
         try {
             
-            const response = await axios.patch(`${import.meta.env.VITE_BACKEND}/cart/${id}`, quantity);
-            // console.log(response.data);
+            const response = await axios.patch(`${import.meta.env.VITE_BACKEND}/cart/${updated.id}`, updated);
+            console.log(response.data);
             return response.data;
         } catch (error) {
             throw error;
@@ -125,7 +125,9 @@ const postsSlice = createSlice({
 
 
             .addCase(updatePost.fulfilled, (state, action) => {
+                console.log("enter updatePost");
                 const index = state.posts.findIndex(post => post.id === action.payload.id);
+                console.log("enter index");
                 if (index !== -1) {
                     state.posts[index].quantity = action.payload.quantity; // Use action.payload.quantity
                 }

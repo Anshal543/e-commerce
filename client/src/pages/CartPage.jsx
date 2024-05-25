@@ -26,9 +26,9 @@ export default function CartPage() {
 //     console.log(cart);
 // }, [cart]);
   const handleQuantity = (e, item) => {
-    const quantity = +e.target.value;
-    const  id = item.id;
-    dispatch(updatePost(id,quantity));
+    const updateItem = {id: item.id, quantity: +e.target.value};
+  
+    dispatch(updatePost(updateItem));
     // console.log(item.id);
   };
 

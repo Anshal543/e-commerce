@@ -8,7 +8,7 @@ export default function CartPage() {
   const userId = useSelector((state) => state.auth.userInfo?._id);
 
   useEffect(() => {
-    dispatch(fetchPosts(userId));
+    dispatch(fetchPosts());
   }, [userId]);
 
   const cart = useSelector((state) => state.posts.posts);

@@ -4,13 +4,13 @@ import { Cart } from "../models/CartModel.js";
 
 export const addToCart = async (req, res) => {
     try {
-        const { quantity, product, user } = req.body;
-        const cartItem = await Cart.findOne({ product, user });
+        const { quantity, product,  } = req.body;
+        const cartItem = await Cart.findOne({ product, user: req.user._id});
         if (cartItem) {
             const updatedCartItem = await Cart.findByIdAndUpdate(cartItem._id, { quantity: cartItem.quantity + quantity }, { new: true }).populate('product').populate('user');
             return res.status(201).json(updatedCartItem);
         }
-        const newCartItem = await Cart.create({ quantity, product, user });
+        const newCartItem = await Cart.create({ quantity, product, user:req.user._id });
         const populatedCartItem = await Cart.findById(newCartItem._id).populate('product').populate('user');
         res.status(201).json(populatedCartItem);
     }
@@ -33,8 +33,8 @@ export const addToCart = async (req, res) => {
 
 export const getCart = async (req, res) => {
     try {
-        const userId = req.query.id;
-        const cart = await Cart.find({ user: userId }).populate('product').populate('user');
+        // const userId = req.query.id;
+        const cart = await Cart.find({ user: req.user._id }).populate('product').populate('user');
         if (!cart) {
             return res.status(404).json({ message: "Cart is empty" });
         }

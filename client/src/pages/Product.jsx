@@ -26,7 +26,7 @@ function Product() {
       navigate("/sign-in");
       return;
     }
-    const newObj = { product:product.id, quantity: 1, user:userInfo._id };
+    const newObj = { product:product.id, quantity: 1};
     // console.log(newObj);
     dispatch(addPost(newObj));
     // console.log("newObj");

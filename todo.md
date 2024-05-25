@@ -1,10 +1,5 @@
-# create and handle add to cart apis   // cart.controller.js
-
-# pagination are hardcotted  // make it dynamic
-
-# mainPage line number 44  and 359
-
+# create and handle add to cart apis   // cart.controller.js    # DONE
 # add sign-up page     # Done
-
-
-# fix cart update issue
+# fix cart update issue    #DONE
+# mainPage line number 44  and 359    
+# pagination are hardcotted  // make it dynamic      

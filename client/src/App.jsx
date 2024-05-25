@@ -35,7 +35,7 @@ const userInfo = useSelector((state) => state.auth.userInfo);
 
 useEffect(() => {
   if (userInfo) {
-    dispatch(fetchPosts(userInfo._id)); // Fetch cart items when userInfo is available
+    dispatch(fetchPosts()); // Fetch cart items when userInfo is available
   }
 }, [dispatch, userInfo]);
 

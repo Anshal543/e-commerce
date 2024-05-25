@@ -11,9 +11,9 @@ const initialState = {
 // Define the thunk for fetching posts from the API
 export const fetchPosts = createAsyncThunk(
     'posts/fetchPosts',
-    async (userId) => {
+    async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_BACKEND}/cart?id=${userId}`);
+            const response = await axios.get(`${import.meta.env.VITE_BACKEND}/cart`);
             //   Assuming each post object from the API has a quantity property
             // const postsWithQuantity = response.data.map(post => ({ ...post, quantity: 1 }));
             // console.log(response.data);

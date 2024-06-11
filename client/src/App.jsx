@@ -18,6 +18,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import ProtectedRoutes from './pages/ProtectedRoutes'
 import SignUp from './pages/SignUp'
 import { fetchPosts } from './features/post/postSlice'
+import UserOrders from './pages/UserOrders'
+import UserProfile from './pages/UserProfile'
 axios.defaults.withCredentials=true 
 function App() {
 const dispatch=useDispatch()
@@ -37,7 +39,7 @@ useEffect(() => {
   if (userInfo) {
     dispatch(fetchPosts()); // Fetch cart items when userInfo is available
   }
-}, [dispatch, userInfo]);
+}, [ userInfo]);
 
 
   return (
@@ -68,6 +70,8 @@ useEffect(() => {
         } />
       <Route path='/sign-in' element={<LoginPage />}/>
       <Route path="/sign-up" element={<SignUp />} />
+      <Route path="/orders" element={<UserOrders />} />
+      <Route path="/profile" element={<UserProfile/>} />
       <Route path='/*' element={<NotFound/>} />
       </Routes>
     

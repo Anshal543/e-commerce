@@ -16,6 +16,7 @@ export const loginInfo = createAsyncThunk(
   async ({ email, password }) => {
     try {
       const response = await axios.post(`${import.meta.env.VITE_BACKEND}/auth`, { email, password });
+      console.log(response.data,"loginINfo");
       return response.data;
     } catch (error) {
       throw error;
@@ -28,6 +29,18 @@ export const signUp = createAsyncThunk(
   async ({ name, email, password }) => {
     try {
       const response = await axios.post(`${import.meta.env.VITE_BACKEND}/sign-up`, { name, email, password });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const updateUserAsync = createAsyncThunk(
+  'auth/updateUserAsync',
+  async (updated) => {
+    try {
+      const response = await axios.put(`${import.meta.env.VITE_BACKEND}/user`, updated);
       return response.data;
     } catch (error) {
       throw error;
@@ -68,6 +81,18 @@ const authSlice = createSlice({
         state.userInfo = action.payload;
       })
       .addCase(signUp.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+
+      .addCase(updateUserAsync.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateUserAsync.fulfilled, (state, action) => {
+        state.loading = false;
+        state.userInfo = action.payload;
+      })
+      .addCase(updateUserAsync.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });

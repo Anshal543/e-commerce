@@ -3,6 +3,8 @@ import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import { customError } from "../utils/CustomError.js";
 let salt = bcrypt.genSaltSync(10);
+
+
 export const createUser = async (req, res) => {
   const { name, email, password, phone, addresses } = req.body
   try {

@@ -87,3 +87,15 @@ export const updateCartItem = async (req, res) => {
     }
 
 }
+
+export const emptyCart = async (req, res) => {
+    try {
+        const deletedCart = await Cart.deleteMany({ user: req.user._id });
+        if (!deletedCart) {
+            return res.status(404).json({ message: "Cart is empty" });
+        }
+        res.status(200).json(deletedCart);
+    } catch (error) {
+        next(error)
+    }
+}

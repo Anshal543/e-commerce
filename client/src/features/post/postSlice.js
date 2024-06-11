@@ -47,7 +47,7 @@ export const updatePost = createAsyncThunk(
     'posts/updatePost',
     async (updated) => {
         try {
-            
+
             const response = await axios.patch(`${import.meta.env.VITE_BACKEND}/cart/${updated.id}`, updated);
             console.log(response.data);
             return response.data;
@@ -73,7 +73,7 @@ export const emptyCart = createAsyncThunk(
     'posts/emptyCart',
     async () => {
         try {
-            const response = await axios.delete(`http://localhost:3000/posts`);
+            const response = await axios.put(`${import.meta.env.VITE_BACKEND}/cart/empty`);
             return response.data;
         } catch (error) {
             throw error;
@@ -95,7 +95,7 @@ const postsSlice = createSlice({
                 state.loading = false;
                 const existingPost = state.posts.find(post => post.product.id === action.payload.product.id);
                 if (existingPost) {
-                    existingPost.quantity+=1;
+                    existingPost.quantity += 1;
                 } else {
                     state.posts = action.payload;
                 }
@@ -132,12 +132,19 @@ const postsSlice = createSlice({
                     state.posts[index].quantity = action.payload.quantity; // Use action.payload.quantity
                 }
             })
-            
+
 
             .addCase(deletePost.fulfilled, (state, action) => {
                 // Filter out the deleted post from the state
                 state.posts = state.posts.filter(post => post.id !== action.payload.id);
-            });
+            })
+            .addCase(emptyCart.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(emptyCart.fulfilled, (state, action) => {
+                state.loading = false;
+                state.posts = [];
+            })
 
     },
 });

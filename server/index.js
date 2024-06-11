@@ -6,6 +6,8 @@ import { connectDB } from "./db/db.js"
 import userRoutes from "./routes/UserRoutes.js"
 import ProductRoutes from "./routes/ProductRoutes.js"
 import CartRoutes from "./routes/CartRoutes.js"
+import orderRoutes from "./routes/orderRoutes.js"
+import userRoute from "./routes/userRoute.js"
 env.config()
 
 
@@ -25,6 +27,8 @@ app.listen(5000, () => console.log("server running on port 5000"))
 app.use('/api/v1/auth', userRoutes)
 app.use('/api/v1/products', ProductRoutes)
 app.use('/api/v1/cart', CartRoutes)
+app.use('/api/v1/orders', orderRoutes)
+app.use('/api/v1/user', userRoute)
 
 app.use((err, req, res, next) => {
     // 

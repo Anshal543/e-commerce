@@ -11,7 +11,7 @@ export default function CartPage() {
     dispatch(fetchPosts());
   }, [userId]);
 
-  const cart = useSelector((state) => state.posts.posts);
+  const cart = useSelector((state) => state.posts?.posts);
 
   const totalAmount = cart
     ?.reduce((acc, item) => acc + item.product.price * item.quantity, 0)

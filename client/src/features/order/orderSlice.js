@@ -5,16 +5,28 @@ import axios from 'axios';
 
 // Define the initial state
 const initialState = {
-    orders:[],
-    status:'idle',
-    currentOrder:null
+  orders: [],
+  status: 'idle',
+  currentOrder: null
 };
 
 export const createOrder = createAsyncThunk(
   'products/createOrder',
   async (order) => {
     try {
-      const response = await axios.post('http://localhost:3000/orders',order);
+      const response = await axios.post("http://localhost:5000/api/v1/orders", order);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const fetchOrders = createAsyncThunk(
+  'products/fetchOrders',
+  async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/v1/orders/own");
       return response.data;
     } catch (error) {
       throw error;
@@ -50,15 +62,20 @@ const orderSlice = createSlice({
       .addCase(createOrder.fulfilled, (state, action) => {
         state.status = 'idle';
         state.orders.push(action.payload);
-        state.currentOrder=null
+        state.currentOrder = null
       })
       .addCase(createOrder.rejected, (state, action) => {
         state.loading = false;
         state.error = "Something went wrong!";
-      });
+      })
+      .addCase(fetchOrders.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.orders = action.payload;
+        state.currentOrder = null
+      })
   },
 });
 
 // Export the actions and reducer
-export const {} = orderSlice.actions;
+export const { } = orderSlice.actions;
 export default orderSlice.reducer;

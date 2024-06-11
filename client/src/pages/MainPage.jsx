@@ -47,7 +47,7 @@ export default function MainPage() {
 
   const handleSort = (e, op) => {
     // console.log(e.target);
-    const _sort = e.target;
+    // const _sort = e.target;
 
     setSort(op._sort);
   };
@@ -59,7 +59,25 @@ export default function MainPage() {
 
   useEffect(() => {
     dispatch(fetchProductByFilter({ filter, sort,page }));
-  }, [filter, sort, page]);
+  }, [filter, sort, page,dispatch]);
+
+  // handle multiple categories filtering
+  // const handleFilter = (e, section, option) => {
+  //   const newFilter = { ...filter };
+  //   const { name, checked } = e.target;
+  //   if(checked){
+  //     if(newFilter[section.id]){
+  //       newFilter[section.id].push(option.value)
+  //     }else{
+  //       newFilter[section.id]=[option.value]
+      
+  //     }
+  //   }else{
+  //     newFilter[section.id]=newFilter[section.id].filter((item)=>item!==option.value)
+  //   }
+ 
+  // }
+
 
   //   const handleFilter = (e,section,cat) => {
   //     const newFilter={...filter}
@@ -79,19 +97,46 @@ export default function MainPage() {
   // // }
   //   }
 
+  // const handleFilter = (e, section) => {
+  //   const { name, checked } = e.target;
+  //   const newFilter = { ...filter };
+
+  //   // Update the filter based on the checkbox status
+  //   if (checked) {
+  //     newFilter[name] = e.target.defaultValue;
+  //   } else {
+  //     delete newFilter[name];
+  //   }
+
+  //   setFilter(newFilter);
+  // };
+
   const handleFilter = (e, section) => {
-    const { name, checked } = e.target;
+    const { name, checked, value } = e.target;
     const newFilter = { ...filter };
+
+    // Ensure the category is initialized as an array
+    if (!newFilter[name]) {
+        newFilter[name] = [];
+    }
 
     // Update the filter based on the checkbox status
     if (checked) {
-      newFilter[name] = e.target.defaultValue;
+        // Add the selected value to the array
+        newFilter[name].push(value);
     } else {
-      delete newFilter[name];
+        // Remove the unselected value from the array
+        newFilter[name] = newFilter[name].filter(item => item !== value);
+        
+        // If the array becomes empty, remove the category key
+        if (newFilter[name].length === 0) {
+            delete newFilter[name];
+        }
     }
 
     setFilter(newFilter);
-  };
+};
+
 
   return (
     <div className="bg-white">
@@ -176,6 +221,8 @@ export default function MainPage() {
                                 {section.options.map((option, optionIdx) => (
                                   <div
                                     key={option.value}
+
+
                                     className="flex items-center"
                                   >
                                     <input

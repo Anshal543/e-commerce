@@ -20,6 +20,9 @@ import SignUp from './pages/SignUp'
 import { fetchPosts } from './features/post/postSlice'
 import UserOrders from './pages/UserOrders'
 import UserProfile from './pages/UserProfile'
+import AdminProductListPage from './pages/admin/AdminProductListPage'
+import AdminProductForm from './pages/admin/AdminProductForm'
+import AdminProductDetailPage from './pages/admin/AdminProductDetailPage'
 axios.defaults.withCredentials=true 
 function App() {
 const dispatch=useDispatch()
@@ -72,6 +75,13 @@ useEffect(() => {
       <Route path="/sign-up" element={<SignUp />} />
       <Route path="/orders" element={<UserOrders />} />
       <Route path="/profile" element={<UserProfile/>} />
+
+      <Route path="/admin" element={<AdminProductListPage />}/>
+      <Route path="/admin/product-form/edit/:id" element={<AdminProductForm />}/>
+
+
+      <Route path="/admin/product/:id" element={<AdminProductDetailPage />}/>
+
       <Route path='/*' element={<NotFound/>} />
       </Routes>
     

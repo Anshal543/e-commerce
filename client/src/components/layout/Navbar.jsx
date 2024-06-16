@@ -3,25 +3,37 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchProducts,
-  fetchProductsBySearch,
-} from "../../features/product/productSlice";
-import { logout } from "../../features/auth/authSlice";
-import axios from "axios";
-import { fetchPosts } from "../../features/post/postSlice";
+// import {
+//   fetchProducts,
+//   fetchProductsBySearch,
+// } from "../../features/product/productSlice";
+// import { logout } from "../../features/auth/authSlice";
+// import axios from "axios";
+// import { fetchPosts } from "../../features/post/postSlice";
 
-const navigation = [{ name: "Dashboard", href: "/", current: true }];
+// const navigation = [{ name: "Dashboard", href: "/", current: true }];
+const navigation = [
+  { name: 'Products', link: '/', user: true },
+  { name: 'Admin Products', link: '/admin', admin: true },
+  { name: 'Admin Orders', link: '/admin/orders', admin: true },
+];
+
+
+const userNavigation = [
+  { name: 'My Profile', link: '/profile' },
+  { name: 'My Orders', link: '/my-orders' },
+  { name: 'Sign out', link: '/logout' },
+];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Navbar() {
-  const dispatch = useDispatch();
-  const [search, setSearch] = useState("");
+  // const dispatch = useDispatch();
+  // const [search, setSearch] = useState("");
 
-  const userInfo = useSelector((state) => state.auth.userInfo);
+  const userInfo = useSelector((state) => state.auth?.userInfo);
 
   // useEffect(() => {
   //   if (userInfo) {
@@ -29,17 +41,17 @@ export default function Navbar() {
   //   }
   // }, [dispatch]);
 
-  const handleInput = (e) => {
-    let value = e.target.value;
-    setSearch(value);
-    setTimeout(() => {
-      if (value.length == 0) {
-        dispatch(fetchProducts());
-      } else {
-        dispatch(fetchProductsBySearch(search));
-      }
-    }, 2000);
-  };
+  // const handleInput = (e) => {
+  //   let value = e.target.value;
+  //   setSearch(value);
+  //   setTimeout(() => {
+  //     if (value.length == 0) {
+  //       dispatch(fetchProducts());
+  //     } else {
+  //       dispatch(fetchProductsBySearch(search));
+  //     }
+  //   }, 2000);
+  // };
 
   const handleLogout = async () => {
     try {
@@ -61,7 +73,7 @@ export default function Navbar() {
 
  
 
-  const cart = useSelector((state) => state.posts.posts);
+  const cart = useSelector((state) => state.posts?.posts);
   return (
     <Disclosure as="nav" className="bg-gray-800">
       {({ open }) => (
@@ -109,13 +121,13 @@ export default function Navbar() {
                   </div>
                 </div>
               </div>
-              <input
+              {/* <input
                 type="text"
                 placeholder="Search"
                 className="p-2 text-black"
                 value={search}
                 onChange={(e) => handleInput(e)}
-              />
+              /> */}
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
                 {userInfo ? (
                   <>

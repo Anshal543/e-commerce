@@ -23,6 +23,7 @@ import UserProfile from './pages/UserProfile'
 import AdminProductListPage from './pages/admin/AdminProductListPage'
 import AdminProductForm from './pages/admin/AdminProductForm'
 import AdminProductDetailPage from './pages/admin/AdminProductDetailPage'
+import ProtectedAdmin from './ProtectedAdmin'
 axios.defaults.withCredentials=true 
 function App() {
 const dispatch=useDispatch()
@@ -36,7 +37,7 @@ useEffect(()=>{
   }
   getData()
 },[])
-const userInfo = useSelector((state) => state.auth.userInfo);
+const userInfo = useSelector((state) => state.auth?.userInfo);
 
 useEffect(() => {
   if (userInfo) {
@@ -81,6 +82,14 @@ useEffect(() => {
 
 
       <Route path="/admin/product/:id" element={<AdminProductDetailPage />}/>
+         {/* <Route 
+          path="/admin" 
+          element={
+            <ProtectedAdmin>
+              <AdminProductListPage />
+            </ProtectedAdmin>
+          } 
+        /> */}
 
       <Route path='/*' element={<NotFound/>} />
       </Routes>

@@ -12,12 +12,13 @@ export default function CartPage() {
   }, [userId]);
 
   const cart = useSelector((state) => state.posts?.posts);
+  console.log(cart);
 
   const totalAmount = cart
-    ?.reduce((acc, item) => acc + item.product.price * item.quantity, 0)
+    ?.reduce((acc, item) => acc + item.product?.price * item.quantity, 0)
     .toFixed(2);
 
-  const totalItems = cart?.reduce((acc, item) => acc + item.quantity, 0);
+  const totalItems = cart?.reduce((acc, item) => acc + item?.quantity, 0);
 
   const handleRemove = (id) => {
     dispatch(deletePost(id));

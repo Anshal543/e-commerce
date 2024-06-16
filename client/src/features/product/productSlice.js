@@ -7,6 +7,7 @@ import axios from 'axios';
 const initialState = {
   products: [],
   loading: false,
+  totalProducts: 0,
   error: null,
   selectedProduct: null
 };
@@ -61,7 +62,7 @@ export const fetchSingleProduct = createAsyncThunk(
 //       for (let key in filter) {
 //         qs += `${key}=${filter[key]}&`
 //       }
-//       // console.log(qs);
+       // console.log(qs);
 //       const response = await axios.get('http://localhost:8800/products?' + qs);
 //       console.log(response.data);
 //       return response.data;
@@ -98,6 +99,30 @@ export const fetchProductByFilter = createAsyncThunk(
   }
 );
 
+export const  createProductAsync = createAsyncThunk(
+  'products/createProductAsync',
+  async (product) => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/v1/products', product);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
+export const updateProductAsync = createAsyncThunk(
+  'products/updateProductAsync',
+  async (product) => {
+    try {
+      const response = await axios.put(`http://localhost:5000/api/v1/products/${product.id}`, product);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+);
+
 
 
 // Create the product slice
@@ -113,6 +138,7 @@ const productSlice = createSlice({
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.loading = false;
         state.products = action.payload;
+        // state.totalProducts = action.payload.total;
         state.error = null;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
@@ -126,6 +152,7 @@ const productSlice = createSlice({
       .addCase(fetchProductsBySearch.fulfilled, (state, action) => {
         state.loading = false;
         state.products = action.payload;
+        // state.totalProducts = action.payload.total;
         state.error = null;
       })
       .addCase(fetchProductsBySearch.rejected, (state, action) => {
@@ -152,6 +179,7 @@ const productSlice = createSlice({
       .addCase(fetchProductByFilter.fulfilled, (state, action) => {
         state.loading = false;
         state.products = action.payload;
+        // state.totalProducts = action.payload.total
         state.error = null;
       });
 

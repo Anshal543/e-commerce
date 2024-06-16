@@ -25,8 +25,7 @@ import {
   Squares2X2Icon,
 } from '@heroicons/react/20/solid';
 import { fetchProductByFilter } from '../product/productSlice';
-// import { ITEMS_PER_PAGE } from '../../../app/constants';
-let ITEMS_PER_PAGE = 10;
+import { ItemsPerPage } from '../../constants/index';
 const sortOptions = [
   { name: 'Best Rating', sort: 'rating', order: 'desc', current: false },
   { name: 'Price: Low to High', sort: 'price', order: 'asc', current: false },
@@ -38,23 +37,38 @@ function classNames(...classes) {
 }
 
 export default function AdminProductList() {
+
   const dispatch = useDispatch();
-  const products = useSelector((state) => state.products.products);
+  const products = useSelector((state) => state.products?.products);
+  console.log(products);
+
 //   const brands = useSelector(selectBrands);
 //   const categories = useSelector(selectCategories);
-  const totalItems = useSelector((state) => state.products.products).length;
-//   const filters = [
-//     {
-//       id: 'category',
-//       name: 'Category',
-//       options: categories,
-//     },
-//     {
-//       id: 'brand',
-//       name: 'Brands',
-//       options: brands,
-//     },
-//   ];
+  const totalItems = useSelector((state) => state.products?.totalProducts);
+  const filters = [
+    {
+      id: 'category',
+      name: 'Category',
+      options: [
+        { value: "smartphones", label: "smartphones", checked: false },
+        { value: 'laptops', label: 'laptops', checked: false },
+        { value: "fragrances", label: 'fragrances', checked: false },
+        { value: "groceries", label: "groceries", checked: false },
+        { value: "home-decoration", label: "home-decoration", checked: false },
+      ],
+    },
+    {
+      id: 'brand',
+      name: 'Brands',
+      options: [
+        { value: 'Apple', label: 'Apple', checked: false },
+        { value: 'Samsung', label: 'Samsung', checked: false },
+        { value: 'Microsoft', label: 'Microsoft', checked: false },
+        { value: 'Google', label: 'Google', checked: false },
+        { value: 'LG', label: 'LG', checked: false },
+      ],
+    },
+  ];
 
   const [filter, setFilter] = useState({});
   const [sort, setSort] = useState({});
@@ -83,7 +97,6 @@ export default function AdminProductList() {
 
   const handleSort = (e, option) => {
     const sort = { _sort: option.sort, _order: option.order };
-    console.log({ sort });
     setSort(sort);
   };
 
@@ -93,8 +106,7 @@ export default function AdminProductList() {
   };
 
   useEffect(() => {
-    const pagination = { _page: page, _limit: ITEMS_PER_PAGE };
-    dispatch(fetchProductByFilter({ filter, sort, pagination }));
+    dispatch(fetchProductByFilter({ filter, sort , page  }));
   }, [dispatch, filter, sort, page]);
 
   useEffect(() => {
@@ -113,7 +125,7 @@ export default function AdminProductList() {
           handleFilter={handleFilter}
           mobileFiltersOpen={mobileFiltersOpen}
           setMobileFiltersOpen={setMobileFiltersOpen}
-        //   filters={filters}
+          filters={filters}
         ></MobileFilter>
 
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -194,7 +206,7 @@ export default function AdminProductList() {
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
               <DesktopFilter
                 handleFilter={handleFilter}
-                // filters={filters}
+                filters={filters}
               ></DesktopFilter>
               {/* Product grid */}
 
@@ -207,7 +219,7 @@ export default function AdminProductList() {
                     Add New Product
                   </Link>
                 </div>
-                <ProductGrid products={products}></ProductGrid>
+                <ProductGrid products={products} />
               </div>
               {/* Product grid end */}
             </div>
@@ -230,7 +242,7 @@ function MobileFilter({
   mobileFiltersOpen,
   setMobileFiltersOpen,
   handleFilter,
-//   filters,
+  filters,
 }) {
   return (
     <Transition.Root show={mobileFiltersOpen} as={Fragment}>
@@ -275,7 +287,7 @@ function MobileFilter({
               </div>
 
               {/* Filters */}
-              {/* <form className="mt-4 border-t border-gray-200">
+              <form className="mt-4 border-t border-gray-200">
                 {filters.map((section) => (
                   <Disclosure
                     as="div"
@@ -336,7 +348,7 @@ function MobileFilter({
                     )}
                   </Disclosure>
                 ))}
-              </form> */}
+              </form>
             </Dialog.Panel>
           </Transition.Child>
         </div>
@@ -348,7 +360,7 @@ function MobileFilter({
 function DesktopFilter({ handleFilter, filters }) {
   return (
     <form className="hidden lg:block">
-      {/* {filters.map((section) => (
+      {filters.map((section) => (
         <Disclosure
           as="div"
           key={section.id}
@@ -396,13 +408,13 @@ function DesktopFilter({ handleFilter, filters }) {
             </>
           )}
         </Disclosure>
-      ))} */}
+      ))}
     </form>
   );
 }
 
 function Pagination({ page, setPage, handlePage, totalItems }) {
-  const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(totalItems / ItemsPerPage);
   return (
     <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
       <div className="flex flex-1 justify-between sm:hidden">
@@ -424,13 +436,13 @@ function Pagination({ page, setPage, handlePage, totalItems }) {
           <p className="text-sm text-gray-700">
             Showing{' '}
             <span className="font-medium">
-              {(page - 1) * ITEMS_PER_PAGE + 1}
+              {(page - 1) * ItemsPerPage + 1}
             </span>{' '}
             to{' '}
             <span className="font-medium">
-              {page * ITEMS_PER_PAGE > totalItems
+              {page * ItemsPerPage> totalItems
                 ? totalItems
-                : page * ITEMS_PER_PAGE}
+                : page * ItemsPerPage}
             </span>{' '}
             of <span className="font-medium">{totalItems}</span> results
           </p>
@@ -482,7 +494,7 @@ function ProductGrid({ products }) {
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
-          {products.map((product) => (
+          {products?.map((product) => (
             <div>
               <Link to={`/product-detail/${product.id}`} key={product.id}>
                 <div className="group relative border-solid border-2 p-2 border-gray-200">
